@@ -2,12 +2,13 @@
 Comprehensive Demo of UHH Scientific Visualization Tool
 
 This script demonstrates all major features of the Unified Harmonic Helper.
-Outputs are saved to /tmp for easy inspection.
+Outputs are saved to a temporary directory for easy inspection.
 """
 
 import numpy as np
 import sys
 import os
+import tempfile
 import matplotlib
 matplotlib.use('Agg')  # Use non-interactive backend for saving
 
@@ -15,6 +16,9 @@ matplotlib.use('Agg')  # Use non-interactive backend for saving
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from uhh import HarmonicField, HarmonicVisualizer
+
+# Get cross-platform temporary directory
+OUTPUT_DIR = tempfile.gettempdir()
 
 
 def demo_2d_harmonic():
@@ -41,12 +45,13 @@ def demo_2d_harmonic():
     print(f"  Field range: [{field.min():.3f}, {field.max():.3f}]")
     print(f"  Total energy: {hf.compute_energy(field):.2f}")
     
+    output_path = os.path.join(OUTPUT_DIR, "uhh_2d_harmonic.png")
     viz.plot_2d_field(field, X, Y,
                      title="2D Harmonic Field (Fourier Modes)",
                      cmap="RdBu_r",
                      show_contours=True,
-                     save_path="/tmp/uhh_2d_harmonic.png")
-    print(f"  Saved visualization to: /tmp/uhh_2d_harmonic.png")
+                     save_path=output_path)
+    print(f"  Saved visualization to: {output_path}")
     print()
 
 
@@ -76,12 +81,13 @@ def demo_wave_superposition():
     print(f"  Field shape: {field.shape}")
     print(f"  Field range: [{field.min():.3f}, {field.max():.3f}]")
     
+    output_path = os.path.join(OUTPUT_DIR, "uhh_wave_superposition.png")
     viz.plot_2d_field(field, X, Y,
                      title="Wave Superposition from Multiple Sources",
                      cmap="twilight",
                      show_contours=False,
-                     save_path="/tmp/uhh_wave_superposition.png")
-    print(f"  Saved visualization to: /tmp/uhh_wave_superposition.png")
+                     save_path=output_path)
+    print(f"  Saved visualization to: {output_path}")
     print()
 
 
@@ -104,11 +110,12 @@ def demo_3d_surface():
     print(f"✓ Creating 3D surface plot")
     print(f"  Field shape: {field.shape}")
     
+    output_path = os.path.join(OUTPUT_DIR, "uhh_3d_surface.png")
     viz.plot_3d_surface(field, X, Y,
                        title="3D Harmonic Field Surface",
                        cmap="plasma",
-                       save_path="/tmp/uhh_3d_surface.png")
-    print(f"  Saved visualization to: /tmp/uhh_3d_surface.png")
+                       save_path=output_path)
+    print(f"  Saved visualization to: {output_path}")
     print()
 
 
@@ -136,11 +143,12 @@ def demo_gradient_field():
     print(f"  Gradient X range: [{grad_x.min():.3f}, {grad_x.max():.3f}]")
     print(f"  Gradient Y range: [{grad_y.min():.3f}, {grad_y.max():.3f}]")
     
+    output_path = os.path.join(OUTPUT_DIR, "uhh_gradient.png")
     viz.plot_vector_field(grad_x, grad_y, X, Y,
                          title="Gradient Field of Harmonic Function",
                          scale=0.3,
-                         save_path="/tmp/uhh_gradient.png")
-    print(f"  Saved visualization to: /tmp/uhh_gradient.png")
+                         save_path=output_path)
+    print(f"  Saved visualization to: {output_path}")
     
     # Compute Laplacian
     laplacian = hf.compute_laplacian(field, dx)
@@ -148,12 +156,13 @@ def demo_gradient_field():
     print(f"✓ Computed Laplacian")
     print(f"  Laplacian range: [{laplacian.min():.3f}, {laplacian.max():.3f}]")
     
+    output_path = os.path.join(OUTPUT_DIR, "uhh_laplacian.png")
     viz.plot_2d_field(laplacian, X, Y,
                      title="Laplacian of Harmonic Field",
                      cmap="seismic",
                      show_contours=True,
-                     save_path="/tmp/uhh_laplacian.png")
-    print(f"  Saved visualization to: /tmp/uhh_laplacian.png")
+                     save_path=output_path)
+    print(f"  Saved visualization to: {output_path}")
     print()
 
 
@@ -180,12 +189,13 @@ def demo_spherical_harmonics():
     print(f"  Field range: [{field_3d.min():.3f}, {field_3d.max():.3f}]")
     print(f"  Total energy: {hf.compute_energy(field_3d):.2f}")
     
+    output_path = os.path.join(OUTPUT_DIR, "uhh_spherical_harmonics.png")
     viz.plot_2d_field(field_3d, X, Y,
                      title="3D Harmonic Field (Spherical Harmonics) - Slice at z=0",
                      cmap="coolwarm",
                      show_contours=True,
-                     save_path="/tmp/uhh_spherical_harmonics.png")
-    print(f"  Saved visualization to: /tmp/uhh_spherical_harmonics.png")
+                     save_path=output_path)
+    print(f"  Saved visualization to: {output_path}")
     print()
 
 
@@ -212,12 +222,13 @@ def demo_boundary_conditions():
     print(f"  Original field energy: {hf.compute_energy(field):.2f}")
     print(f"  Field with BC energy: {hf.compute_energy(field_bc):.2f}")
     
+    output_path = os.path.join(OUTPUT_DIR, "uhh_boundary_conditions.png")
     viz.plot_2d_field(field_bc, X, Y,
                      title="Harmonic Field with Dirichlet BC",
                      cmap="viridis",
                      show_contours=True,
-                     save_path="/tmp/uhh_boundary_conditions.png")
-    print(f"  Saved visualization to: /tmp/uhh_boundary_conditions.png")
+                     save_path=output_path)
+    print(f"  Saved visualization to: {output_path}")
     print()
 
 
@@ -239,7 +250,7 @@ def main():
         print("=" * 60)
         print("All demonstrations completed successfully!")
         print("=" * 60)
-        print("\nGenerated files in /tmp/:")
+        print(f"\nGenerated files in {OUTPUT_DIR}:")
         print("  - uhh_2d_harmonic.png")
         print("  - uhh_wave_superposition.png")
         print("  - uhh_3d_surface.png")
