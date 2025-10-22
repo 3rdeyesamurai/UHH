@@ -1,0 +1,26 @@
+{
+  "name": "@{{ dashCase name }}",
+  "version": "0.1.0",
+  "description": "{{ description }}",
+  "type": {{#if useEsm}}"module"{{else}}"commonjs"{{/if}},
+  "main": {{#if useEsm}}"dist/index.js"{{else}}"dist/index.cjs"{{/if}},
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint \"src/**/*.{ts,tsx}\"",
+    "test": "vitest run"
+  },
+  "author": "{{ author }}",
+  "license": "{{ license }}",
+  {{#if publish}}
+  "publishConfig": { "access": "public" },
+  {{/if}}
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@typescript-eslint/eslint-plugin": "^8.13.0",
+    "@typescript-eslint/parser": "^8.13.0",
+    "eslint": "^9.13.0",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.4"
+  }
+}
